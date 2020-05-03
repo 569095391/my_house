@@ -1,0 +1,162 @@
+老业务
+insert into test_bud125
+select t.building_id CsmBuildingID,
+b.buildid pm_Building_ID,
+b.buildsign Buildingcode,
+t.building_id BuildingID,
+b.regionsnum regionsnum,
+null regioncode,
+p.csmprojectid PROJECT_ID,
+p.commname project_name,
+null IS_PUBLIC,  
+t.IF_VIRTUAL vitual,
+ b.unitnum unitsnum,b.FloorsNum floorsnum,
+ t.if_deleted is_del,t.planid planid,t.planname planname,
+ b.commid commid,r.RegionName regionname,
+ b.buildtype building_type,
+ b.buildname budname  
+from t_building1  t
+left join tm_community_building3 b on b.csmbuildingid=t.building_id and  b.isdelete=0
+left join tm_community_region r on r.CommID=b.commid and r.regionsnum=b.regionsnum
+left join  tm_community p on p.commid=b.commid
+
+
+
+----u享家
+insert into test_bud126
+select b.csm_building_id CsmBuildingID,b.sync_building_id pm_Building_ID,null buildingcode,
+b.id Building_ID,r.regioncode regionsnum,
+null regioncode,p.csm_project_id PROJECT_ID,
+ p.name project_name,null IS_PUBLIC,b.virtual_flag vitual,b.unit_count unitsnum,b.floor_count floorsnum,
+b.is_del is_del, 
+null plan_id,b.group_name plan_name,r.projectsyncid commid,
+b.group_name regionname,b.building_type building_type,
+b.name budname
+from brick_building1 b left join community_region  r on r.projectid=b.project_id
+left join project p on p.sync_project_id=r.projectsyncid
+where b.building_type!=16
+
+物业云
+insert into test_bud127
+select 
+b.old_crm_building_id CsmBuildingID,
+b.PM_BUILDING_ID pm_Building_ID,
+b.building_code Buildingcode,
+b.building_id BuildingID,
+null regionsnum,
+b.REGION1_ID regioncode,r.t_project_id project_ID,null project_name,
+b.is_public IS_PUBLIC,b.building_nature vitual,
+b.unit_num unitsnum,
+null floorsnum,
+b.is_del is_del,null plan_id,
+b.plan_name plan_name,
+r.pm_region_id commid,
+r.region_name regionname,
+b.building_type building_type,
+b.building_name budname
+from bd_building1 b
+left join bd_region1 r on r.region_id=b.REGION1_ID 
+where b.building_type!=16
+
+主数据
+insert into test_bud128
+select b.crm_building_id CsmBuildingID,
+null pm_Building_ID,b.building_code Buildingcode,
+b.id BuildingID,null regionsnum,null regioncode,
+p.crm_project_id PROJECT_ID,
+ p.project_name project_name,
+ b.public_flag IS_PUBLIC,
+ b.building_nature vitual,
+ b.unit_num unitsnum,b.total_floor_num floorsnum,
+ case  b.activity_status when 'Y' then 0 else 1 end is_del,
+ b.plan_id plan_id,b.plan_name planname,p.pm_project_id commid,null regionname,
+ case b.building_type when 'CC' then 16 end  building_type,
+ b.building_name budname
+ from op_building1 b
+ left join op_project p on p.id=b.project_id and p.activity_status='Y'
+
+楼栋入宽表
+ insert into  test_big_bud_af
+(
+  CsmBuildingID1,
+  pm_Building_ID1,
+  Buildingcode1,
+  Building_ID1,
+  regionsnum1,
+  regioncode1,
+  project_ID1,
+  project_name1,
+  is_public1,
+  vitual1,
+  unitsnum1,
+  floorsnum1,
+  is_del1,
+  plan_id1,
+  plan_name1,
+  commid1,
+  regionname1,
+  building_type1,
+  CsmBuildingID4,
+  pm_Building_ID4,
+  Buildingcode4,
+  Building_ID4,
+  regionsnum4,
+  regioncode4,
+  project_ID4,
+  project_name4,
+  is_public4,
+  vitual4,
+  unitsnum4,
+  floorsnum4,
+  is_del4,
+  plan_id4,
+  plan_name4,
+  commid4,
+  regionname4,
+  building_type4,
+	budname1,
+	budname4
+ )
+select 
+  t5.CsmBuildingID,
+  t5.pm_Building_ID,
+  t5.Buildingcode,
+  t5.Building_ID,
+  t5.regionsnum,
+  t5.regioncode,
+  t5.project_ID,
+  t5.project_name,
+  t5.is_public,
+  t5.vitual,
+  t5.unitsnum,
+  t5.floorsnum,
+  t5.is_del,
+  t5.plan_id,
+  t5.plan_name,
+  t5.commid,
+  t5.regionname,
+  t5.building_type,
+  t8.CsmBuildingID,
+  t8.pm_Building_ID,
+  t8.Buildingcode,
+  t8.Building_ID,
+  t8.regionsnum,
+  t8.regioncode,
+  t8.project_ID,
+  t8.project_name,
+  t8.is_public,
+  t8.vitual,
+  t8.unitsnum,
+  t8.floorsnum,
+  t8.is_del,
+  t8.plan_id,
+  t8.plan_name,
+  t8.commid,
+  t8.regionname,
+  t8.building_type,
+	t5.budname,t8.budname
+from test_bud125 t5
+-- left join test_tmp126 t6 on t5.CsmRoomID=t6.CsmRoomID
+-- left join test_tmp127 t7 on t5.CsmRoomID=t7.CsmRoomID 
+ left join test_bud128 t8 on t5.CsmBuildingID=t8.CsmBuildingID
+
